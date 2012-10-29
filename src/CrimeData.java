@@ -4,7 +4,7 @@ import parser.csvReader;
 public class CrimeData implements StatisticData {
     // Stores the tags associated with crime rates
     private static ArrayList<String> tags;
-    // Stores one data corresponding to one region
+    // Stores data corresponding to one region
     private ArrayList<String> data;
     private static csvReader reader = new csvReader();
 
@@ -38,7 +38,7 @@ public class CrimeData implements StatisticData {
         // mirrored in the region and city classes
         data.remove(0);
         data.remove(1);
-        Country.getCountry().getRegion(regionName).setData(this);
+        Country.getCountry().getRegion(regionName).setCrimeData(this);
     }
 
     public void setCityData(String line) {
@@ -49,6 +49,6 @@ public class CrimeData implements StatisticData {
         // mirrored in the region and city classes
         data.remove(0);
         data.remove(1);
-        Country.getCountry().getRegion(regionName).getCity(cityName).setData(this);
+        Country.getCountry().getRegion(regionName).getZone(cityName).setCrimeData(this);
     }
 }
