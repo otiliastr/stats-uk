@@ -38,7 +38,7 @@ public class CrimeData implements StatisticData {
         // mirrored in the region and city classes
         data.remove(0);
         data.remove(1);
-        Country.getInstance().getRegion(regionName).setData(this);
+        Country.getCountry().getRegion(regionName).setData(this);
     }
 
     public void setCityData(String line) {
@@ -49,6 +49,6 @@ public class CrimeData implements StatisticData {
         // mirrored in the region and city classes
         data.remove(0);
         data.remove(1);
-        Country.getInstance().getRegion(regionName).getCity(cityName).setData(this);
+        Country.getCountry().getRegion(regionName).getCity(cityName).setData(this);
     }
 }
