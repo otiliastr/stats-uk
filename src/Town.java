@@ -1,9 +1,9 @@
 class Town extends Zone{
-    public Town() {
-	super();
+    public Town(String name) {
+	super(name);
     }
 
-    public Town(int populationSize){
-	super(populationSize);
+    public Town(String name, int populationSize){
+	super(name,populationSize);
     }
 }
