@@ -51,4 +51,16 @@ public class CrimeData implements StatisticData {
         data.remove(1);
         Country.getCountry().getRegion(regionName).getZone(cityName).setCrimeData(this);
     }
+    
+    /**
+     * Returns a string of all values separated by spaces
+     */
+    public String toString() {
+        String returnString = "";
+        for (String value : data) {
+            returnString.concat(" " + value);
+        }
+
+        return returnString;
+    }
 }
