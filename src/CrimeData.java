@@ -1,12 +1,18 @@
-import java.util.ArrayList;
 import parser.csvReader;
+
+import java.util.ArrayList;
 
 public class CrimeData implements StatisticData {
     // Stores the tags associated with crime rates
     private static ArrayList<String> tags;
     // Stores data corresponding to one region
     private ArrayList<String> data;
+
+    // csv parser
     private static csvReader reader = new csvReader();
+
+    // rating for this data set
+    private double rating;
 
     public ArrayList<String> getData() {
         return data;
@@ -51,6 +57,23 @@ public class CrimeData implements StatisticData {
         data.remove(1);
         Country.getCountry().getRegion(regionName).getZone(cityName).setCrimeData(this);
     }
+
+    /**
+     * Compute the rating for this set of data; used for colouring the map
+     */
+    public void computeRating() {
+        // returns the mean of the data right now
+        rating = 0.0;    
+        // first element is population of region; second is household population
+        for (int i = 2; i < data.size(); ++i) {
+            String strValue = data.get(i);
+            // process the string so that it has no commas
+            strValue = strValue.replace(",", "");
+            double value = Double.parseDouble(strValue);
+            rating += value;
+        }
+    }
+
     
     /**
      * Returns a string of all values separated by spaces
