@@ -8,11 +8,12 @@ public class CrimeData implements StatisticData {
     // Stores data corresponding to one region
     private ArrayList<String> data;
 
-    // csv parser
-    private static csvReader reader = new csvReader();
-
     // rating for this data set
     private double rating;
+
+    // private constructor to prevent instantiating except from
+    // static methods
+    private CrimeData() { }
 
     public ArrayList<String> getData() {
         return data;
@@ -26,6 +27,7 @@ public class CrimeData implements StatisticData {
      * @param line Line in csv file containing tags of the data
      */
     public void setTags(String line) {
+        csvReader reader = new csvReader();
         tags = reader.parse(line);
     }
 
@@ -34,28 +36,32 @@ public class CrimeData implements StatisticData {
      * first element of the row.
      * @param line Line in csv file containing a row of data
      */
-    public void setRegionData(String line) {
-        data = reader.parse(line);
-        if (!data.get(1).equals("Total"))
+    public static void setRegionData(String line) {
+        csvReader reader = new csvReader();
+        CrimeData crimeData = new CrimeData();
+        crimeData.data = reader.parse(line);
+        if (!crimeData.data.get(1).equals("Total"))
             throw new IllegalArgumentException();
 
-        String regionName = data.get(0);
+        String regionName = crimeData.data.get(0);
         // throw out first two elements as all data stored in them is
         // mirrored in the region and city classes
-        data.remove(0);
-        data.remove(1);
-        Country.getCountry().getRegion(regionName).setCrimeData(this);
+        crimeData.data.remove(0);
+        crimeData.data.remove(1);
+        Country.getCountry().getRegion(regionName).setCrimeData(crimeData);
     }
 
-    public void setCityData(String line) {
-        data = reader.parse(line);
-        String regionName = data.get(0);
-        String cityName = data.get(1);
+    public static void setCityData(String line) {
+        csvReader reader = new csvReader();
+        CrimeData crimeData = new CrimeData();
+        crimeData.data = reader.parse(line);
+        String regionName = crimeData.data.get(0);
+        String cityName = crimeData.data.get(1);
         // throw out first two elements as all data stored in them is
         // mirrored in the region and city classes
-        data.remove(0);
-        data.remove(1);
-        Country.getCountry().getRegion(regionName).getZone(cityName).setCrimeData(this);
+        crimeData.data.remove(0);
+        crimeData.data.remove(1);
+        Country.getCountry().getRegion(regionName).getZone(cityName).setCrimeData(crimeData);
     }
 
     /**
