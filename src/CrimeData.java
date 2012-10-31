@@ -91,7 +91,7 @@ public class CrimeData implements StatisticData {
     public String toString() {
         String returnString = "";
         for (String value : data) {
-            returnString.concat(" " + value);
+            returnString += " " + value;
         }
 
         return returnString;
