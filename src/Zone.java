@@ -12,8 +12,8 @@ abstract class Zone{
         this(name,0);
     }
 
-    public void  setCrimeData(CrimeData cd){
-        this.crimeData = cd;
+    public void setCrimeData(CrimeData crimeData){
+        this.crimeData = crimeData;
     }
 
     public int getPopulation(){
@@ -26,5 +26,15 @@ abstract class Zone{
 
     public String getName(){
         return name;
+    }
+
+    // override toString to help with error messages
+    // prints out all the information about this particular Zone
+    public String toString() {
+        String resultString = name + '\n';
+        resultString += String.valueOf(population) + '\n';
+        resultString += crimeData.toString();
+
+        return resultString;
     }
 }
