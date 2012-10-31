@@ -26,7 +26,7 @@ public class CrimeData implements StatisticData {
     /**
      * @param line Line in csv file containing tags of the data
      */
-    public void setTags(String line) {
+    public static void setTags(String line) {
         csvReader reader = new csvReader();
         tags = reader.parse(line);
     }
