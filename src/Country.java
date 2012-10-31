@@ -3,7 +3,7 @@ import java.util.HashMap;
 class Country{
     private static Country uniqueCountry;
     private String name;
-    HashMap<String, Region> regions; 
+    private HashMap<String, Region> regions; 
 
     private Country(){
         regions = new HashMap<String, Region>();
@@ -19,11 +19,16 @@ class Country{
         this.name=name;
     }
 
-    public void addRegion(Region reg){
-        regions.put(reg.getName(), reg);
+    public void addRegion(Region region){
+        regions.put(region.getName(), region);
     }
 
     public Region getRegion(String regionName){
-        return regions.get(regionName); //trebuie tratata exceptia
+        // Add a region if the region isn't found in the table
+        // Assumes the input is correct (might be good to do some
+        // sort of checking)
+        if (!regions.containsKey(regionName))
+            regions.put(regionName, new Region(regionName));
+        return regions.get(regionName); 
     }
 }
