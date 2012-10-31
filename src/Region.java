@@ -17,6 +17,9 @@ class Region extends Zone{
     }
 
     public Zone getZone(String zoneName){
-        return zones.get(zoneName); //trebuie tratata exceptia
+        // add zone to the hashmap if it isn't found
+        if (!zones.containsKey(zoneName)) 
+            zones.put(zoneName, new Zone(zoneName));
+        return zones.get(zoneName); 
     }
 }

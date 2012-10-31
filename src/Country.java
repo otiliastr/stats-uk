@@ -2,6 +2,7 @@ import java.util.HashMap;
 
 class Country{
     private static Country uniqueCountry;
+    private int population;
     private String name;
     private HashMap<String, Region> regions; 
 
@@ -17,6 +18,10 @@ class Country{
 
     public void setName(String name){
         this.name=name;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
     }
 
     public void addRegion(Region region){
