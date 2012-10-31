@@ -1,3 +1,6 @@
+/*
+ * Consider using XML parsers
+ */
 package parser;
 
 import java.util.ArrayList;

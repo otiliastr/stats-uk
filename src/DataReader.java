@@ -29,6 +29,16 @@ public class DataReader {
 
         csvReader reader = new csvReader();
         String line = null;
+        // first line is set of tags; read separately
+        try {
+            line = buf.readLine();
+        } catch(IOException ioe) {
+            System.out.println("Can't read a line from the file.");
+            ioe.printStackTrace();
+        }
+        ArrayList<String> tags = reader.parse(line);
+        CrimeData.setTags(tags);
+
         do {
             try {
                 line = buf.readLine();
