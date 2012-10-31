@@ -27,7 +27,7 @@ public class CrimeData implements StatisticData {
      * @param line Line in csv file containing tags of the data
      */
     public static void setTags(ArrayList<String> tags) {
-        this.tags = tags;
+        CrimeData.tags = tags;
     }
 
     /*
