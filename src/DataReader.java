@@ -12,7 +12,7 @@ public class DataReader {
 
     private DataReader() {}
 
-    public DataReader getInstance() {
+    public static DataReader getInstance() {
         if (uniqueReader == null)
             uniqueReader = new DataReader();
         return uniqueReader;
@@ -39,13 +39,15 @@ public class DataReader {
         ArrayList<String> tags = reader.parse(line);
         CrimeData.setTags(tags);
 
-        do {
+        while (true) {
             try {
                 line = buf.readLine();
             } catch(IOException ioe) {
                 System.out.println("Can't read a line from the file.");
                 ioe.printStackTrace();
             }
+            if (line == null)
+                break;
             ArrayList<String> values = reader.parse(line);
             String regionName = values.get(0);
             String cityName = values.get(1);
@@ -54,6 +56,6 @@ public class DataReader {
                 CrimeData.setRegionData(values);
             else
                 CrimeData.setCityData(values);
-        } while (line != null);
+        }
     }
 }
