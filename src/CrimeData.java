@@ -26,22 +26,18 @@ public class CrimeData implements StatisticData {
     /**
      * @param line Line in csv file containing tags of the data
      */
-    public void setTags(String line) {
-        csvReader reader = new csvReader();
-        tags = reader.parse(line);
+    public static void setTags(ArrayList<String> tags) {
+        CrimeData.tags = tags;
     }
 
     /*
      * Sets the crime data for a region. Region is always 
      * first element of the row.
-     * @param line Line in csv file containing a row of data
+     * @param data Processed data given as an array list
      */
-    public static void setRegionData(String line) {
-        csvReader reader = new csvReader();
+    public static void setRegionData(ArrayList<String> data) {
         CrimeData crimeData = new CrimeData();
-        crimeData.data = reader.parse(line);
-        if (!crimeData.data.get(1).equals("Total"))
-            throw new IllegalArgumentException();
+        crimeData.data = data;
 
         String regionName = crimeData.data.get(0);
         // throw out first two elements as all data stored in them is
@@ -51,10 +47,10 @@ public class CrimeData implements StatisticData {
         Country.getCountry().getRegion(regionName).setCrimeData(crimeData);
     }
 
-    public static void setCityData(String line) {
-        csvReader reader = new csvReader();
+    public static void setCityData(ArrayList<String> data) {
         CrimeData crimeData = new CrimeData();
-        crimeData.data = reader.parse(line);
+        crimeData.data = data;
+
         String regionName = crimeData.data.get(0);
         String cityName = crimeData.data.get(1);
         // throw out first two elements as all data stored in them is
@@ -67,8 +63,8 @@ public class CrimeData implements StatisticData {
     /**
      * Compute the rating for this set of data; used for colouring the map
      */
-    public void computeRating() {
-        // returns the mean of the data right now
+    private void computeRating() {
+        // computes the mean of the data
         rating = 0.0;    
         // first element is population of region; second is household population
         for (int i = 2; i < data.size(); ++i) {
@@ -80,6 +76,14 @@ public class CrimeData implements StatisticData {
         }
     }
 
+    /**
+     * @return Rating of the zone
+     */
+    public double getRating() {
+        if (rating == 0)
+            computeRating();
+        return rating;
+    }
     
     /**
      * Returns a string of all values separated by spaces
@@ -87,7 +91,7 @@ public class CrimeData implements StatisticData {
     public String toString() {
         String returnString = "";
         for (String value : data) {
-            returnString.concat(" " + value);
+            returnString += " " + value;
         }
 
         return returnString;

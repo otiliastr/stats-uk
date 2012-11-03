@@ -17,6 +17,11 @@ class Region extends Zone{
     }
 
     public Zone getZone(String zoneName){
-        return zones.get(zoneName); //trebuie tratata exceptia
+        // if a zone is not in the map, throw an exception
+        // we don't instantiate because we don't know the type
+        // of Zone (can be Region or Town)
+        if (!zones.containsKey(zoneName))
+            throw new IllegalArgumentException();
+        return zones.get(zoneName); 
     }
 }
