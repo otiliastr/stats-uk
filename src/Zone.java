@@ -27,4 +27,8 @@ abstract class Zone{
     public String getName(){
 	return name;
     }
+
+    public double getRating(){
+	return crimeData.getRating();
+    }
 }
