@@ -67,7 +67,10 @@ public class CrimeData implements StatisticData {
         // computes the mean of the data
         rating = 0.0;    
         // first element is population of region; second is household population
-        for (int i = 2; i < data.size(); ++i) {
+        int population = Integer.parseInt(data.get(0));
+        // We're only interested in figures from the most recent year, and 
+        // specifically, only offences per 1000 population
+        for (int i = 5; i < data.size(); i += 4) {
             String strValue = data.get(i);
             // process the string so that it has no commas
             strValue = strValue.replace(",", "");

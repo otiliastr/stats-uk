@@ -51,6 +51,10 @@ public class DataReader {
             ArrayList<String> values = reader.parse(line);
             String regionName = values.get(0);
             String cityName = values.get(1);
+            // last line in the file is data corresponding to the entire
+            // country; right now we skip it
+            if (regionName.contains("England"))
+                break;
             // dealing with data for the entire region
             if (cityName.equals("Total")) 
                 CrimeData.setRegionData(values);
