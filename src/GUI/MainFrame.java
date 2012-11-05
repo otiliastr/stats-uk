@@ -2,7 +2,6 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-
 public class MainFrame extends JFrame {
 	
 	public MainFrame() {
@@ -17,11 +16,13 @@ public class MainFrame extends JFrame {
 		
 		//search field for the search engine
 		SearchField searchField = new SearchField();
-		add(searchField, BorderLayout.NORTH);		
+		this.getContentPane().add(searchField, BorderLayout.NORTH);		
 		
 		//image panel with the map
 		ImagePanel imagePanel = new ImagePanel();		
-		add(imagePanel, BorderLayout.CENTER);
+		this.getContentPane().add(imagePanel, BorderLayout.CENTER);
+
+        this.pack();
 	}
 
     public static void main(String[] args) {
