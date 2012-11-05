@@ -1,4 +1,5 @@
 import java.awt.*;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -15,11 +16,11 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1000,700);
 		
-		//search field
+		//search field for the search engine
 		SearchField searchField = new SearchField();
-		add(searchField, BorderLayout.NORTH);
+		add(searchField, BorderLayout.NORTH);		
 		
-		//image panel
+		//image panel with the map
 		ImagePanel imagePanel = new ImagePanel();		
 		add(imagePanel, BorderLayout.CENTER);
 		
