@@ -1,35 +1,43 @@
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import javax.swing.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+
+// packages for svg reader
+import com.kitfox.svg.*;
+import com.kitfox.svg.app.beans.*;
 
 public class ImagePanel extends JPanel{
 
-    private BufferedImage image;
+    private SVGIcon icon;
 
     public ImagePanel() {
-       setBackground(Color.CYAN);
-       setAlignmentY(CENTER_ALIGNMENT);
-       
-       //setBounds(300, 300, 200, 300); 
-       setSize(100, 50);//y u no work?
+        this.setPreferredSize(new Dimension(400, 400));
 
-       try {                
-          image = ImageIO.read(new File("/home/otilia/stats_uk/stats-uk/img/ukmap.gif"));
-       } catch (IOException ex) {
-            // handle exception...
-       }
+        // reader for the image to pass into the svg icon constructor
+        FileReader reader = null;
+        try {
+            reader = new FileReader(new File("image.svg"));
+        } catch(FileNotFoundException fnfe) {
+            System.out.println("File wasn't found. Check its path");
+            fnfe.printStackTrace();
+        }
+        // load svg image; get uri
+        URI uri = SVGCache.getSVGUniverse().loadSVG(reader, "myImage");
+        icon = new SVGIcon();
+        icon.setSvgURI(uri);
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image, 200, 50, null); // last parameter is ImageObserver 
+
+        g.setColor(getBackground());
+        g.fillRect(0, 0, getWidth(), getHeight());
+
+        icon.paintIcon(this, g, 0, 0);
     }
 }
