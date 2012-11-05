@@ -7,44 +7,30 @@ public class MainFrame extends JFrame {
 	
 	public MainFrame() {
 		super("Statistics UK");
+
+        init();
 	}
 	
 	public void init() {
 		setLayout(new BorderLayout());		;
-		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1000,700);
 		
 		//search field
 		SearchField searchField = new SearchField();
-		add(searchField, BorderLayout.NORTH);
+		this.getContentPane().add(searchField, BorderLayout.NORTH);
 		
 		//image panel
 		ImagePanel imagePanel = new ImagePanel();		
-		add(imagePanel, BorderLayout.CENTER);
-		
-		/*
-		//button
-		JButton b = new JButton("Hello");
-		add(b, BorderLayout.SOUTH);
-		b.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						repaint();
-					}
-				});
-	    */
-		setVisible(true);
+		this.getContentPane().add(imagePanel, BorderLayout.CENTER);
+
+        this.pack();
 	}
-	
-	public void paint(Graphics g) {
-		super.paint(g);
-		g.setColor(Color.blue);
-		//g.fillRect(0, count, 200, 20);
-	}
-	
-	public void update(Graphics g) {
-		g.setColor(Color.red);
-		//g.fillRect(0, count, 200, 20);
-	}
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainFrame().setVisible(true);
+            }
+        });
+    }
 }
