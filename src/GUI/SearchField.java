@@ -9,6 +9,7 @@ public class SearchField extends JPanel{
     private JTextField tf;
     private JComboBox combo = new JComboBox();
     private Vector<String> v = new Vector<String>();
+
     public SearchField() {
         super(new BorderLayout());
         combo.setEditable(true);      
@@ -101,9 +102,9 @@ public class SearchField extends JPanel{
                     setModel(getSuggestedModel(v, text), text);
                 }
                 hide_flag = true; 
-            }else if (code==KeyEvent.VK_ESCAPE) {
+            } else if (code == KeyEvent.VK_ESCAPE) {
                 hide_flag = true; 
-            }else if (code == KeyEvent.VK_RIGHT) {
+            } else if (code == KeyEvent.VK_RIGHT) {
                 for(int i = 0; i < v.size(); i++) {
                     String str = v.elementAt(i);
                     if(str.startsWith(text)) {
