@@ -16,7 +16,7 @@ import com.kitfox.svg.xml.StyleAttribute;
 public class ImagePanel extends JPanel{
 
     private SVGIcon icon;
-    private final SVGDiagram diagram;
+    private SVGDiagram diagram;
 
     private double scaleX = 1.0;
     private double scaleY = 1.0;
