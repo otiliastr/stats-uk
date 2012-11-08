@@ -115,16 +115,4 @@ public class SearchField extends JPanel{
         }
         return m;
     }
-    
-    /*
-    //main function to test the search field 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.getContentPane().add(new SearchField());
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
-    */
 }
