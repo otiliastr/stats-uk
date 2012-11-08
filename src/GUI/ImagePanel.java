@@ -22,6 +22,8 @@ public class ImagePanel extends JPanel{
     private double scaleY = 1.0;
     private int panelWidth = 500;
     private int panelHeight = 600;
+    private int iconWidth;
+    private int iconHeight;
 
     public ImagePanel() {
         // reader for the image to pass into the svg icon constructor
@@ -41,34 +43,32 @@ public class ImagePanel extends JPanel{
         icon.setPreferredSize(new Dimension(panelWidth, panelHeight));
         icon.setAntiAlias(true);
         icon.setScaleToFit(true);
-        icon.setClipToViewbox(true);
-
 
         diagram = icon.getSvgUniverse().getDiagram(uri);
 
         this.addMouseMotionListener(new MouseHighlightListener());
         this.addMouseListener(new RegionClickedListener());
+        this.addComponentListener(new ResizingListener());
         getWidthAndHeight();
+        setScale();
     }
 
-    public void setScale(int width, int height) {
-        scaleX = (double)width / panelWidth;
-        scaleY = (double)height / panelHeight;
+    public void setScale() {
+        scaleX = (double)iconWidth / panelWidth;
+        scaleY = (double)iconHeight / panelHeight;
     }
 
     public void getWidthAndHeight() {
         SVGRoot root = diagram.getRoot();
         try {
-            int width, height;
             if (root.hasAttribute("width", AnimationElement.AT_XML) &&
                     root.hasAttribute("height", AnimationElement.AT_XML)) {
                 StyleAttribute attrib = new StyleAttribute("width");
                 root.getStyle(attrib);
-                width = attrib.getIntValue(); 
+                iconWidth = attrib.getIntValue(); 
                 attrib = new StyleAttribute("height");
                 root.getStyle(attrib);
-                height = attrib.getIntValue();
-                setScale(width, height);
+                iconHeight = attrib.getIntValue();
             }
         } catch (SVGException e) {
             System.out.println("Root has no attributes width and height; reverting to regular sizes");
@@ -172,7 +172,11 @@ public class ImagePanel extends JPanel{
         public void componentShown(ComponentEvent e) {}
         public void componentMoved(ComponentEvent e) {}
         public void componentResized(ComponentEvent e) {
-            System.out.println(getWidth() + " " + getHeight());
+/*            panelWidth = getWidth();
+            panelHeight = getHeight();
+            System.out.println(panelWidth + " " + panelHeight);
+            icon.setPreferredSize(new Dimension(panelWidth, panelHeight));
+            //setScale(panelWidth, panelHeight);*/
         }
     }
 }
