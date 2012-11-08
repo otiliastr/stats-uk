@@ -92,8 +92,9 @@ public class ImagePanel extends JPanel{
                     elem.setAttribute("fill", AnimationElement.AT_CSS, baseColour);
                 } 
             }
-        } catch(Exception e) {
-            System.out.println("Bubu");
+        } catch(SVGException e) {
+            System.out.println("Root has no children.");
+            e.printStackTrace();
         }
     }
 
