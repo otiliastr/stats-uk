@@ -17,6 +17,9 @@ public class ImagePanel extends JPanel{
     private final SVGDiagram diagram;
     private final SVGRoot root;
 
+    private double scaleX = 525 / 500.0;
+    private double scaleY = 650 / 600.0;
+
     public ImagePanel() {
         // reader for the image to pass into the svg icon constructor
         FileReader reader = null;
@@ -37,45 +40,11 @@ public class ImagePanel extends JPanel{
         icon.setScaleToFit(true);
         icon.setClipToViewbox(true);
 
-        final double scaleX = 525 / 500.0;
-        final double scaleY = 650 / 600.0;
 
         diagram = icon.getSvgUniverse().getDiagram(uri);
         root = diagram.getRoot();
-        this.addMouseMotionListener(new MouseMotionListener() {
-            public void mouseMoved(MouseEvent e) {
-                int nx = e.getX();
-                nx = (int) (nx * scaleX);
-                int ny = e.getY();
-                ny = (int) (ny * scaleY);
-                Point pickPoint = new Point(nx, ny);
-                List< List<SVGElement> > child = null;
-                try {
-                    child = diagram.pick(pickPoint, null);
-                } catch(SVGException ex) {
-                    System.out.println("SVGElement not found at point: " + pickPoint);
-                    ex.printStackTrace();
-                }
-                if (child.size() > 0) {
-                    for (List<SVGElement> subchild : child) {
-                        for (SVGElement elem : subchild) {
-                            try {
-                                if (elem.hasAttribute("fill", AnimationElement.AT_CSS)) {
-                                    clearAll();
-                                    elem.setAttribute("fill", AnimationElement.AT_CSS, "#accfff");
-                                    repaint();
-                                }
-                            } catch(SVGException ex) {
-                                System.out.println("SVGElement does not have an attribute fill.");
-                                ex.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
-            public void mouseDragged(MouseEvent e) {}
-        });
 
+        this.addMouseMotionListener(new MouseHighlightListener());
     }
 
     public void clearAll()
@@ -101,5 +70,38 @@ public class ImagePanel extends JPanel{
         g.fillRect(0, 0, getWidth(), getHeight());
 
         icon.paintIcon(null, g, 0, 0);
+    }
+
+    class MouseHighlightListener implements MouseMotionListener {
+        public void mouseMoved(MouseEvent e) {
+            int nx = (int)(e.getX() * scaleX);
+            int ny = (int)(e.getY() * scaleY);
+
+            Point pickPoint = new Point(nx, ny);
+            List< List<SVGElement> > child = null;
+            try {
+                child = diagram.pick(pickPoint, null);
+            } catch(SVGException ex) {
+                System.out.println("SVGElement not found at point: " + pickPoint);
+                ex.printStackTrace();
+            }
+            if (child.size() > 0) {
+                for (List<SVGElement> subchild : child) {
+                    for (SVGElement elem : subchild) {
+                        try {
+                            if (elem.hasAttribute("fill", AnimationElement.AT_CSS)) {
+                                clearAll();
+                                elem.setAttribute("fill", AnimationElement.AT_CSS, "#accfff");
+                                repaint();
+                            }
+                        } catch(SVGException ex) {
+                            System.out.println("SVGElement does not have an attribute fill.");
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        public void mouseDragged(MouseEvent e) {}
     }
 }
