@@ -21,8 +21,8 @@ public class SearchField extends JPanel{
                 };
             }
         });
+
         tf = (JTextField) combo.getEditor().getEditorComponent();
-        //tf.setSize(10, 20);
         tf.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         tf.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
@@ -45,6 +45,7 @@ public class SearchField extends JPanel{
                     }
                 });
             }
+
             public void keyPressed(KeyEvent e) {
                 String text = tf.getText();
                 int code = e.getKeyCode();
@@ -69,18 +70,12 @@ public class SearchField extends JPanel{
                 }
             }
         });
-        String[] countries = {"Afghanistan", "Albania", "Algeria", "Andorra", "Angola","Argentina"
-            ,"Armenia","Austria","Bahamas","Bahrain", "Bangladesh","Barbados", "Belarus","Belgium",
-                "Benin","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","Bulgaria",
-                "Burkina Faso","Burma","Burundi","Cambodia","Cameroon","Canada", "China","Colombia",
-                "Comoros","Congo","Croatia","Cuba","Cyprus","Czech Republic","Denmark", "Georgia",
-                "Germany","Ghana","Great Britain","Greece","Hungary","Holland","India","Iran","Iraq",
-                "Italy","Somalia", "Spain", "Sri Lanka", "Sudan","Suriname", "Swaziland","Sweden",
-                "Switzerland", "Syria","Uganda","Ukraine","United Arab Emirates","United Kingdom",
-                "United States","Uruguay","Uzbekistan","Vanuatu","Venezuela","Vietnam",
-                "Yemen","Zaire","Zambia","Zimbabwe"};
-        for(int i=0;i<countries.length;i++){
-            v.addElement(countries[i]);
+
+        String[] regions = {"England", "West Midlands", "East Midlands", "North East England",
+            "North West England", "South East England", "South West England", "London", 
+            "Yorkshire and Humber"};
+        for(int i=0; i < regions.length; i++){
+            v.addElement(regions[i]);
         }
         setModel(new DefaultComboBoxModel(v), "");
         JPanel p = new JPanel(new FlowLayout());
@@ -102,12 +97,15 @@ public class SearchField extends JPanel{
         setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         //setPreferredSize(new Dimension(20, 300));
     }
+
     private boolean hide_flag = false;
+
     private void setModel(DefaultComboBoxModel mdl, String str) {
         combo.setModel(mdl);
         combo.setSelectedIndex(-1);
         tf.setText(str);
     }
+
     private static DefaultComboBoxModel getSuggestedModel(java.util.List<String> list, String text) {
         DefaultComboBoxModel m = new DefaultComboBoxModel();
         for(String s: list) {
