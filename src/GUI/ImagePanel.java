@@ -26,23 +26,21 @@ public class ImagePanel extends JPanel{
     private int iconHeight;
 
     public ImagePanel() {
+        this.setPreferredSize(new Dimension(panelWidth, panelHeight));
+
         icon = new SVGIcon();
         readImage("england.svg");
-
-        this.setPreferredSize(new Dimension(panelWidth, panelHeight));
         
         this.addMouseMotionListener(new MouseHighlightListener());
         this.addMouseListener(new RegionClickedListener());
         this.addComponentListener(new ResizingListener());
-        getWidthAndHeight();
-        setScale();
     }
 
     public void readImage(String filename) {
         // reader for the image to pass into the svg icon constructor
         FileReader reader = null;
         try {
-            reader = new FileReader(new File(filename));
+            reader = new FileReader(new File("img/" + filename));
         } catch(FileNotFoundException fnfe) {
             System.out.println("File wasn't found. Check its path");
             fnfe.printStackTrace();
@@ -56,6 +54,9 @@ public class ImagePanel extends JPanel{
         icon.setScaleToFit(true);
 
         diagram = icon.getSvgUniverse().getDiagram(uri);
+
+        getWidthAndHeight();
+        setScale();
     }
 
     public void setScale() {
@@ -169,10 +170,8 @@ public class ImagePanel extends JPanel{
                     SVGElement elem = subchild.get(subchild.size() - 1);
                     String id = elem.getId();
                     System.out.println(id);
-                    if (id.equals("east-midlands")) {
-                        readImage("east-midlands.svg");
-                        repaint();
-                    }
+                    readImage(id + ".svg");
+                    repaint();
                 }
             }
         }
