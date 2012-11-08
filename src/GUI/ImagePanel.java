@@ -11,14 +11,17 @@ import javax.imageio.ImageIO;
 import com.kitfox.svg.*;
 import com.kitfox.svg.app.beans.*;
 import com.kitfox.svg.animation.*;
+import com.kitfox.svg.xml.StyleAttribute;
 
 public class ImagePanel extends JPanel{
 
     private SVGIcon icon;
     private final SVGDiagram diagram;
 
-    private double scaleX = 525 / 500.0;
-    private double scaleY = 650 / 600.0;
+    private double scaleX = 1.0;
+    private double scaleY = 1.0;
+    private int panelWidth = 500;
+    private int panelHeight = 600;
 
     public ImagePanel() {
         // reader for the image to pass into the svg icon constructor
@@ -34,7 +37,7 @@ public class ImagePanel extends JPanel{
         icon = new SVGIcon();
         icon.setSvgURI(uri);
 
-        this.setPreferredSize(new Dimension(500, 600));
+        this.setPreferredSize(new Dimension(panelWidth, panelHeight));
         icon.setPreferredSize(new Dimension(500, 600));
         icon.setAntiAlias(true);
         icon.setScaleToFit(true);
@@ -45,17 +48,43 @@ public class ImagePanel extends JPanel{
 
         this.addMouseMotionListener(new MouseHighlightListener());
         this.addMouseListener(new RegionClickedListener());
+        getWidthAndHeight();
     }
 
-    public void clearAll()
-    {
+    public void setScale(int width, int height) {
+        scaleX = (double)width / panelWidth;
+        scaleY = (double)height / panelHeight;
+    }
+
+    public void getWidthAndHeight() {
+        SVGRoot root = diagram.getRoot();
+        try {
+            int width, height;
+            if (root.hasAttribute("width", AnimationElement.AT_XML) &&
+                    root.hasAttribute("height", AnimationElement.AT_XML)) {
+                StyleAttribute attrib = new StyleAttribute("width");
+                root.getStyle(attrib);
+                width = attrib.getIntValue(); 
+                attrib = new StyleAttribute("height");
+                root.getStyle(attrib);
+                height = attrib.getIntValue();
+                setScale(width, height);
+            }
+        } catch (SVGException e) {
+            System.out.println("Root has no attributes width and height; reverting to regular sizes");
+            e.printStackTrace();
+        }
+    }
+
+
+    public void clearAll(String baseColour) {
         SVGRoot root = diagram.getRoot();
         try {
             List<SVGElement> child = root.getChildren(null);
             child = child.get(1).getChildren(null);
             for (SVGElement elem : child) {
                 if (elem.hasAttribute("fill", AnimationElement.AT_CSS)) {
-                    elem.setAttribute("fill", AnimationElement.AT_CSS, "#ffc8c8");
+                    elem.setAttribute("fill", AnimationElement.AT_CSS, baseColour);
                 } 
             }
         } catch(Exception e) {
@@ -96,7 +125,7 @@ public class ImagePanel extends JPanel{
         for (List<SVGElement> childList : child) 
             for (SVGElement elem : childList)
                 allChildren.add(elem);
-        
+
         return allChildren;
     }
 
@@ -109,7 +138,7 @@ public class ImagePanel extends JPanel{
             for (SVGElement elem : children) {
                 try {
                     if (elem.hasAttribute("fill", AnimationElement.AT_CSS)) {
-                        clearAll();
+                        clearAll("#ffc8c8");
                         elem.setAttribute("fill", AnimationElement.AT_CSS, "#accfff");
                         repaint();
                     }
