@@ -26,31 +26,36 @@ public class ImagePanel extends JPanel{
     private int iconHeight;
 
     public ImagePanel() {
-        // reader for the image to pass into the svg icon constructor
-        FileReader reader = null;
-        try {
-            reader = new FileReader(new File("image.svg"));
-        } catch(FileNotFoundException fnfe) {
-            System.out.println("File wasn't found. Check its path");
-            fnfe.printStackTrace();
-        }
-        // load svg image; get uri
-        URI uri = SVGCache.getSVGUniverse().loadSVG(reader, "myImage");
         icon = new SVGIcon();
-        icon.setSvgURI(uri);
+        readImage("england.svg");
 
         this.setPreferredSize(new Dimension(panelWidth, panelHeight));
-        icon.setPreferredSize(new Dimension(panelWidth, panelHeight));
-        icon.setAntiAlias(true);
-        icon.setScaleToFit(true);
-
-        diagram = icon.getSvgUniverse().getDiagram(uri);
-
+        
         this.addMouseMotionListener(new MouseHighlightListener());
         this.addMouseListener(new RegionClickedListener());
         this.addComponentListener(new ResizingListener());
         getWidthAndHeight();
         setScale();
+    }
+
+    public void readImage(String filename) {
+        // reader for the image to pass into the svg icon constructor
+        FileReader reader = null;
+        try {
+            reader = new FileReader(new File(filename));
+        } catch(FileNotFoundException fnfe) {
+            System.out.println("File wasn't found. Check its path");
+            fnfe.printStackTrace();
+        }
+        // load svg image; get uri
+        URI uri = SVGCache.getSVGUniverse().loadSVG(reader, filename);
+        icon.setSvgURI(uri);
+
+        icon.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        icon.setAntiAlias(true);
+        icon.setScaleToFit(true);
+
+        diagram = icon.getSvgUniverse().getDiagram(uri);
     }
 
     public void setScale() {
@@ -161,7 +166,12 @@ public class ImagePanel extends JPanel{
             if (child != null && child.size() > 0) {
                 for (List<SVGElement> subchild : child) {
                     SVGElement elem = subchild.get(subchild.size() - 1);
-                    System.out.println("Clicked on " + elem.getId() + "!");
+                    String id = elem.getId();
+                    System.out.println(id);
+                    if (id.equals("east-midlands")) {
+                        readImage("east-midlands.svg");
+                        repaint();
+                    }
                 }
             }
         }
@@ -174,7 +184,6 @@ public class ImagePanel extends JPanel{
         public void componentResized(ComponentEvent e) {
             panelWidth = getWidth();
             panelHeight = getHeight();
-            System.out.println(panelWidth + " " + panelHeight);
             icon.setPreferredSize(new Dimension(panelWidth, panelHeight));
             setScale();
         }
