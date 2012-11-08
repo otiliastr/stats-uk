@@ -15,7 +15,6 @@ public class ImagePanel extends JPanel{
 
     private SVGIcon icon;
     private final SVGDiagram diagram;
-    private final SVGRoot root;
 
     private double scaleX = 525 / 500.0;
     private double scaleY = 650 / 600.0;
@@ -42,13 +41,13 @@ public class ImagePanel extends JPanel{
 
 
         diagram = icon.getSvgUniverse().getDiagram(uri);
-        root = diagram.getRoot();
 
         this.addMouseMotionListener(new MouseHighlightListener());
     }
 
     public void clearAll()
     {
+        SVGRoot root = diagram.getRoot();
         try {
             List<SVGElement> child = root.getChildren(null);
             child = child.get(1).getChildren(null);
@@ -102,6 +101,11 @@ public class ImagePanel extends JPanel{
                 }
             }
         }
+
         public void mouseDragged(MouseEvent e) {}
+    }
+
+    class RegionClickedListener implements MouseAdapter {
+        
     }
 }
