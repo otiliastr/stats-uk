@@ -38,7 +38,7 @@ public class ImagePanel extends JPanel{
         icon.setSvgURI(uri);
 
         this.setPreferredSize(new Dimension(panelWidth, panelHeight));
-        icon.setPreferredSize(new Dimension(500, 600));
+        icon.setPreferredSize(new Dimension(panelWidth, panelHeight));
         icon.setAntiAlias(true);
         icon.setScaleToFit(true);
         icon.setClipToViewbox(true);
@@ -164,6 +164,15 @@ public class ImagePanel extends JPanel{
                     System.out.println("Clicked on " + elem.getId() + "!");
                 }
             }
+        }
+    }
+
+    class ResizingListener implements ComponentListener {
+        public void componentHidden(ComponentEvent e) {}
+        public void componentShown(ComponentEvent e) {}
+        public void componentMoved(ComponentEvent e) {}
+        public void componentResized(ComponentEvent e) {
+            System.out.println(getWidth() + " " + getHeight());
         }
     }
 }
