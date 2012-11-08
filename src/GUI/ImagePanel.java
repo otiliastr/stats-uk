@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 import java.util.List;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 // packages for svg reader
@@ -43,6 +44,7 @@ public class ImagePanel extends JPanel{
         diagram = icon.getSvgUniverse().getDiagram(uri);
 
         this.addMouseMotionListener(new MouseHighlightListener());
+        this.addMouseListener(new RegionClickedListener());
     }
 
     public void clearAll()
@@ -71,33 +73,49 @@ public class ImagePanel extends JPanel{
         icon.paintIcon(null, g, 0, 0);
     }
 
+    List< List<SVGElement> > getChildrenFromPoint(int x, int y) {
+        Point pickPoint = new Point(x, y);
+        List< List<SVGElement> > child = null;
+        try {
+            child = diagram.pick(pickPoint, null);
+        } catch(SVGException ex) {
+            System.out.println("SVGElement not found at point: " + pickPoint);
+            ex.printStackTrace();
+        }
+
+        return child;
+    }
+
+    List<SVGElement> getAllChildrenFromPoint(int x, int y) {
+        Point pickPoint = new Point(x, y);
+        List< List<SVGElement> > child = getChildrenFromPoint(x, y);
+        if (child == null)
+            return null;
+
+        List<SVGElement> allChildren = new ArrayList<SVGElement>();
+        for (List<SVGElement> childList : child) 
+            for (SVGElement elem : childList)
+                allChildren.add(elem);
+        
+        return allChildren;
+    }
+
     class MouseHighlightListener implements MouseMotionListener {
         public void mouseMoved(MouseEvent e) {
             int nx = (int)(e.getX() * scaleX);
             int ny = (int)(e.getY() * scaleY);
 
-            Point pickPoint = new Point(nx, ny);
-            List< List<SVGElement> > child = null;
-            try {
-                child = diagram.pick(pickPoint, null);
-            } catch(SVGException ex) {
-                System.out.println("SVGElement not found at point: " + pickPoint);
-                ex.printStackTrace();
-            }
-            if (child.size() > 0) {
-                for (List<SVGElement> subchild : child) {
-                    for (SVGElement elem : subchild) {
-                        try {
-                            if (elem.hasAttribute("fill", AnimationElement.AT_CSS)) {
-                                clearAll();
-                                elem.setAttribute("fill", AnimationElement.AT_CSS, "#accfff");
-                                repaint();
-                            }
-                        } catch(SVGException ex) {
-                            System.out.println("SVGElement does not have an attribute fill.");
-                            ex.printStackTrace();
-                        }
+            List<SVGElement> children = getAllChildrenFromPoint(nx, ny);
+            for (SVGElement elem : children) {
+                try {
+                    if (elem.hasAttribute("fill", AnimationElement.AT_CSS)) {
+                        clearAll();
+                        elem.setAttribute("fill", AnimationElement.AT_CSS, "#accfff");
+                        repaint();
                     }
+                } catch(SVGException ex) {
+                    System.out.println("SVGElement does not have an attribute fill.");
+                    ex.printStackTrace();
                 }
             }
         }
@@ -105,7 +123,18 @@ public class ImagePanel extends JPanel{
         public void mouseDragged(MouseEvent e) {}
     }
 
-    class RegionClickedListener implements MouseAdapter {
-        
+    class RegionClickedListener extends MouseAdapter {
+        public void mouseClicked(MouseEvent e) {
+            int nx = (int)(e.getX() * scaleX);
+            int ny = (int)(e.getY() * scaleY);
+
+            List< List<SVGElement> > child = getChildrenFromPoint(nx, ny);
+            if (child != null && child.size() > 0) {
+                for (List<SVGElement> subchild : child) {
+                    SVGElement elem = subchild.get(subchild.size() - 1);
+                    System.out.println("Clicked on " + elem.getId() + "!");
+                }
+            }
+        }
     }
 }
