@@ -172,11 +172,11 @@ public class ImagePanel extends JPanel{
         public void componentShown(ComponentEvent e) {}
         public void componentMoved(ComponentEvent e) {}
         public void componentResized(ComponentEvent e) {
-/*            panelWidth = getWidth();
+            panelWidth = getWidth();
             panelHeight = getHeight();
             System.out.println(panelWidth + " " + panelHeight);
             icon.setPreferredSize(new Dimension(panelWidth, panelHeight));
-            //setScale(panelWidth, panelHeight);*/
+            setScale();
         }
     }
 }
