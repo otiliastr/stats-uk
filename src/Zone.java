@@ -1,5 +1,6 @@
 abstract class Zone{
     private int population;
+    private double normalisedRating;
     private String name;
     private CrimeData crimeData;
 
@@ -26,6 +27,10 @@ abstract class Zone{
 
     public double getRating() {
         return crimeData.getRating();
+    }
+
+    public void setNormalisedRating(double rating) {
+        this.normalisedRating = rating; 
     }
 
     public String getName(){
