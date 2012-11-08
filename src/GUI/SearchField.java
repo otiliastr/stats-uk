@@ -13,6 +13,7 @@ public class SearchField extends JPanel{
     public SearchField() {
         super(new BorderLayout());
         combo.setEditable(true);      
+        combo.setPrototypeDisplayValue("                                          ");
         combo.setUI(new BasicComboBoxUI() {
             protected JButton createArrowButton() {
                 return new JButton() {
@@ -30,7 +31,7 @@ public class SearchField extends JPanel{
         String[] regions = {"England", "West Midlands", "East Midlands", "North East England",
             "North West England", "South East England", "South West England", "London", 
             "Yorkshire and Humber"};
-        for(int i=0; i < regions.length; i++){
+        for (int i = 0; i < regions.length; i++){
             v.addElement(regions[i]);
         }
         setModel(new DefaultComboBoxModel(v), "");
