@@ -52,8 +52,9 @@ public class ImagePanel extends JPanel{
                 List< List<SVGElement> > child = null;
                 try {
                     child = diagram.pick(pickPoint, null);
-                } catch(Exception ex) {
-                    System.out.println("Bubu");
+                } catch(SVGException ex) {
+                    System.out.println("SVGElement not found at point: " + pickPoint);
+                    ex.printStackTrace();
                 }
                 if (child.size() > 0) {
                     for (List<SVGElement> subchild : child) {
@@ -64,8 +65,9 @@ public class ImagePanel extends JPanel{
                                     elem.setAttribute("fill", AnimationElement.AT_CSS, "#accfff");
                                     repaint();
                                 }
-                            } catch(Exception ex) {
-                                System.out.println("BUBU");
+                            } catch(SVGException ex) {
+                                System.out.println("SVGElement does not have an attribute fill.");
+                                ex.printStackTrace();
                             }
                         }
                     }
