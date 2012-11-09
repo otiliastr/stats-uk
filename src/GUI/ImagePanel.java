@@ -15,6 +15,8 @@ import com.kitfox.svg.xml.StyleAttribute;
 
 public class ImagePanel extends JPanel{
 
+	private GUIDirector mediator;
+	
     private SVGIcon icon;
     private SVGDiagram diagram;
 
@@ -25,7 +27,8 @@ public class ImagePanel extends JPanel{
     private int iconWidth;
     private int iconHeight;
 
-    public ImagePanel() {
+    public ImagePanel(GUIDirector mediator) {
+    	this.mediator = mediator;
         this.setPreferredSize(new Dimension(panelWidth, panelHeight));
 
         icon = new SVGIcon();
@@ -82,7 +85,6 @@ public class ImagePanel extends JPanel{
         }
     }
 
-
     public void clearAll(String baseColour) {
         SVGRoot root = diagram.getRoot();
         try {
@@ -109,6 +111,29 @@ public class ImagePanel extends JPanel{
         icon.paintIcon(null, g, 0, 0);
     }
 
+
+    /** Repaints with the map the region given by regionName * */
+    public void paintRegion(String regionName){
+    	//translate name into region id
+    	
+    	String id = regionName;
+    	//already done in searchStrategy
+    	/*
+    	id = regionName.toLowerCase(); //must be lower case
+    	id = id.replaceAll("\\s+", " "); //remove repeated whitespaces
+    	if (Character.isWhitespace(id.charAt(0)) ) //remove white spaces at the beginning of the string 
+    		id = id.substring(1);
+    	if (Character.isWhitespace(id.charAt(id.length()-1)) ) //remove white spaces at the end of the string 
+    		id = id.substring(0, id.length()-1); 	
+    	*/
+    	
+    	id = id.replaceAll(" ", "-"); //replace whitespaces with -
+    	
+    	//repaint using id     	
+    	readImage(id + ".svg");//TODO: must check if id is valid before calling readImage
+        repaint();
+    }
+    
     List< List<SVGElement> > getChildrenFromPoint(int x, int y) {
         Point pickPoint = new Point(x, y);
         List< List<SVGElement> > child = null;
