@@ -6,12 +6,18 @@ import javax.swing.plaf.basic.*;
 
 //class for the tip box 
 public class SearchField extends JPanel{
+	private GUIDirector mediator;
+	
     private JTextField tf;
     private JComboBox combo = new JComboBox();
     private Vector<String> v = new Vector<String>();
+    private SearchStrategy searchStrategy;
 
-    public SearchField() {
+    public SearchField(GUIDirector mediator) {
         super(new BorderLayout());
+        this.mediator = mediator;
+        searchStrategy = new DefaultSearchStrategy(mediator);
+        
         combo.setEditable(true);      
         combo.setPrototypeDisplayValue("                                          ");
         combo.setUI(new BasicComboBoxUI() {
@@ -27,10 +33,16 @@ public class SearchField extends JPanel{
         tf = (JTextField) combo.getEditor().getEditorComponent();
         tf.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         tf.addKeyListener(new DropdownSearchListener());
-
-        String[] regions = {"England", "West Midlands", "East Midlands", "North East England",
-            "North West England", "South East England", "South West England", "London", 
-            "Yorkshire and Humber"};
+        tf.addKeyListener(new KeyAdapter() {            
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER && combo.isPopupVisible() == false){
+                	searchStrategy.performSearch(tf.getText()); //perform search
+                }
+            }
+        });
+        
+        String[] regions = mediator.getRegions(); //get array with the name of the regions
+        
         for (int i = 0; i < regions.length; i++){
             v.addElement(regions[i]);
         }
@@ -45,6 +57,7 @@ public class SearchField extends JPanel{
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						//perform search
+						searchStrategy.performSearch(tf.getText());
 					}
 				});
         
@@ -70,7 +83,7 @@ public class SearchField extends JPanel{
         }
         return m;
     }
-    
+ 
     class DropdownSearchListener extends KeyAdapter {
         public void keyTyped(KeyEvent e) {
             EventQueue.invokeLater(new Runnable() {
@@ -117,4 +130,5 @@ public class SearchField extends JPanel{
             }
         }
     }
+
 }
