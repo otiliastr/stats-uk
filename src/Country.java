@@ -24,6 +24,13 @@ class Country{
         this.population = population;
     }
 
+    public void getAggregateRating() {
+        Set<Region> regionSet = regions.keySet();
+
+        DataAggregator aggregator = new DataAggregator(regionSet);
+        aggregator.setAggregateRating();
+    }
+
     public void addRegion(Region region){
         regions.put(region.getName(), region);
     }

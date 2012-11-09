@@ -12,6 +12,13 @@ class Region extends Zone{
         zones =  new HashMap<String, Zone>();
     }
 
+    public void getAggregateRating() {
+        Set<Zone> zoneSet = zones.keySet();
+
+        DataAggregator aggregator = new DataAggregator(zoneSet);
+        aggregator.setAggregateRating();
+    }
+
     public void addZone(Zone z){
         zones.put(z.getName(), z);
     }

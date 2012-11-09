@@ -4,10 +4,10 @@ import java.util.Collections;
 
 public class DataAggregator {
 
-    List<Zone> zones;
+    Set<Zone> zones;
     ArrayList<Double> values;
 
-    public DataAggregator(List<Zone> zones) {
+    public DataAggregator(Set<Zone> zones) {
         this.zones = zones;
 
         for (Zone zone : zones) {
