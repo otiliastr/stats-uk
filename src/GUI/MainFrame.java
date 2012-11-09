@@ -1,8 +1,9 @@
 import java.awt.*;
-import javax.swing.SwingUtilities;
+
 import javax.swing.*;
 
 import java.awt.event.*;
+import java.util.ArrayList;
 
 /**
  * This is the main frame of the application and the Mediator of the GUI components
@@ -11,7 +12,7 @@ public class MainFrame extends JFrame implements GUIDirector{
 	
 	private SearchField searchField; //area with search box and button
 	private ImagePanel imagePanel;  //contains the map
-	private JPanel searchResultsPanel; //panel with the search results
+	private SearchRezPanel searchResultsPanel; //panel with the search results
 	private String[] regions = {"England", "West Midlands", "East Midlands", "North East England",
             "North West England", "South East England", "South West England", "London", 
             "Yorkshire and Humber"};  //TODO: this must be read from file  or initialized in some other place
@@ -52,6 +53,7 @@ public class MainFrame extends JFrame implements GUIDirector{
 	/** Search button was pressed in SearchField => must make results visible**/
 	public void searchPerformed(String [] words){
 		searchResultsPanel.setVisible(true);
+		searchResultsPanel.displayResults(words);
 	}
 	
     public static void main(String[] args) {
@@ -65,8 +67,10 @@ public class MainFrame extends JFrame implements GUIDirector{
     /** Panel with the search results **/
     class SearchRezPanel extends JPanel{
        
+    	ArrayList<JLabel> results;
+    	
     	public SearchRezPanel(){
-    		this.setLayout(new BorderLayout(5, 5));
+    		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));//BorderLayout(5, 5));
     		this.setBackground(Color.WHITE);
     		this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
     		this.setVisible(false);
@@ -77,11 +81,35 @@ public class MainFrame extends JFrame implements GUIDirector{
     					public void actionPerformed(ActionEvent e) {
     						//perform search
     						setVisible(false);
+    						for (JLabel l: results){
+    							searchResultsPanel.remove(l);
+    						}
+    						results.clear();
+    						searchResultsPanel.revalidate();
     					}
     				});
-    		this.add(closeButton, BorderLayout.SOUTH);
+    		this.add(closeButton, BorderLayout.SOUTH);	 
+    		results = new ArrayList<JLabel>();
     	}
-        
+    	
+    	public void displayResults(String [] words){
+    		for (String word : words)
+    		{
+    			JLabel link = new JLabel(word);
+    			link.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    			final String wordToPrint = word.toLowerCase();
+    			link.addMouseListener(new MouseAdapter() {
+        			public void mouseClicked(MouseEvent e) {
+        					if (e.getClickCount() > 0) {
+        						paintRegion(wordToPrint);
+        					}
+        			}
+        		});
+    			this.add(link);
+    			results.add(link);
+    		}
+			repaint();
+    	}
     }
 }
 
