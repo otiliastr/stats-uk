@@ -56,8 +56,7 @@ public class SearchField extends JPanel{
 		b.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						//perform search
-						searchStrategy.performSearch(tf.getText());
+						searchStrategy.performSearch(tf.getText()); //perform search
 					}
 				});
         
